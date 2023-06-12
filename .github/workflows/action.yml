@@ -18,7 +18,7 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Install latest stable
-        uses: actions-rs/toolchain@v1
+        uses: ThexXTURBOXx/toolchain@master
         with:
             toolchain: stable
             override: true
@@ -28,6 +28,6 @@ jobs:
       # as it is set as an "override" for current directory
 
       - name: Run cargo check
-        uses: ThexXTURBOXx/toolchain@master
+        uses: gaoDean/cargo@master
         with:
           command: check
