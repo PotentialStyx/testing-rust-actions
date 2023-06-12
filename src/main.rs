@@ -1,5 +1,5 @@
 fn main() {
     let x = 5;
-    println!("Hello, world!")
+    println!("Hello, world!");
     println!("err")
 }
