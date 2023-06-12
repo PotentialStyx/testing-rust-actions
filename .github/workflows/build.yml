@@ -1,13 +1,18 @@
-on: [push]
+on:
+  push:
+    branches: main
 
-name: build
+name: check
 
 jobs:
   check:
-    name: Rust project
+    name: Rust build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        profile: ["dev", "release"]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/cache@v3
         with:
           path: |
@@ -23,11 +28,20 @@ jobs:
             toolchain: stable
             override: true
             components: rustfmt, clippy
+          
+      - name: Run Clippy
+        uses: giraffate/clippy-action@v1
+        with:
+          reporter: 'github-pr-review'
 
-      # `cargo check` command here will use installed `nightly`
-      # as it is set as an "override" for current directory
-
-      - name: Run cargo check
+      - name: Run cargo build
         uses: gaoDean/cargo@master
         with:
           command: check
+          args: --profile=${{ matrix.profile }}
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: binaryname-linux
+          path: target/release/actions
